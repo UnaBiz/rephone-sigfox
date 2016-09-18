@@ -4,6 +4,7 @@
 #include "../include/vmdcl.h"
 #include "../include/vmdcl_gpio.h"
 #include "../include/vmfs.h"
+#include "../include/vmchset.h"
 #include <stdio.h>
 #include <string.h>
 

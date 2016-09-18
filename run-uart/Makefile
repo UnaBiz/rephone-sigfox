@@ -1,5 +1,5 @@
 
-PROJECT = blink
+PROJECT = run-uart
 
 OBJECTS += main.o
 
