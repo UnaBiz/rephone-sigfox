@@ -7,6 +7,7 @@ It reads data with vm_dcl_read and then writes same data through UART1 with vm_d
 #include "../include/vmtype.h"
 #include "../include/vmlog.h"
 #include "../include/vmsystem.h"
+#include "../include/vmdatetime.h"
 #include "../include/vmtimer.h"
 #include "../include/vmdcl.h"
 #include "../include/vmdcl_gpio.h"
@@ -22,28 +23,39 @@ VM_TIMER_ID_PRECISE sys_timer_id = 0;
 VM_DCL_HANDLE g_uart_handle = 0;  /* handle of UART */
 VM_DCL_OWNER_ID g_owner_id = 0;  /* Module owner of APP */
 vm_dcl_sio_control_dcb_t g_config;  /* UART configuration setting */
+VMCHAR filename[VM_FS_MAX_PATH_LENGTH] = {0};
+VMWCHAR wfilename[VM_FS_MAX_PATH_LENGTH] = {0};
 char buffer[256];
+char buffer2[256];
 
 void log_to_file(const char *log)
 {
-    //  Write the log to the log file and debug console.
-    VMCHAR filename[VM_FS_MAX_PATH_LENGTH] = {0};
-    VMWCHAR wfilename[VM_FS_MAX_PATH_LENGTH] = {0};
+    //  Write the log to the log file c:\log.txt and debug console.
+    if (log <= 0) return;
+    vm_date_time_t time;
+    VMINT ret = vm_time_get_date_time(&time);
+    if (ret >= 0) {  //  Add the date time to the log.
+        snprintf(buffer2, sizeof(buffer2), "%04d-%02d-%02d %02d:%02d:%02d: %s", time.year, time.month, time.day,
+                 time.hour, time.minute, time.second, log);
+    }
+    else {
+        snprintf(buffer2, sizeof(buffer2), "%s", log);
+    }
     VM_FS_HANDLE filehandle = -1;
     VMUINT writelen = 0;
     vm_log_info(log);
-    snprintf(filename, sizeof(filename), "%c:\\%s", vm_fs_get_internal_drive_letter(), "log.txt");
-    vm_chset_ascii_to_ucs2(wfilename, sizeof(wfilename), filename);
+    if (filename[0] == 0) {  //  Compose the filename c:\log.txt.
+        snprintf(filename, sizeof(filename), "%c:\\%s", vm_fs_get_internal_drive_letter(), "log.txt");
+        vm_chset_ascii_to_ucs2(wfilename, sizeof(wfilename), filename);
+    }
     //  Create file.
-    if ((filehandle = vm_fs_open(wfilename, VM_FS_MODE_APPEND, TRUE)) < 0)
-    {
+    if ((filehandle = vm_fs_open(wfilename, VM_FS_MODE_APPEND, TRUE)) < 0) {
         vm_log_info("log_to_file: Failed to create file: %s",filename);
         return;
     }
     //  Write file.
-    VMINT ret = vm_fs_write(filehandle, (void*)log, strlen(log), &writelen);
-    if (ret < 0)
-    {
+    ret = vm_fs_write(filehandle, (void*)buffer2, strlen(buffer2), &writelen);
+    if (ret < 0) {
         vm_log_info("log_to_file: Failed to write file");
         return;
     }
