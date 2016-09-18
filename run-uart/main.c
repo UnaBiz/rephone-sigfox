@@ -18,7 +18,11 @@ It reads data with vm_dcl_read and then writes same data through UART1 with vm_d
 #include <stdio.h>
 #include <string.h>
 
-VM_DCL_HANDLE gpio_handle;
+//  LED to GPIO mapping, according to https://github.com/loboris/RePhone_on_Linux/blob/master/Documents/Lua%20on%20RePhone%20Manual.pdf
+const int MAX_LED = 3;
+const int GPIO_LED[3] = { 17 /* red */, 15 /* green */, 12 /* blue */ };
+VM_DCL_HANDLE gpio_handle[3] = {0, 0, 0};  //  Handle for each GPIO LED.
+
 VM_TIMER_ID_PRECISE sys_timer_id = 0;
 VM_DCL_HANDLE g_uart_handle = 0;  /* handle of UART */
 VM_DCL_OWNER_ID g_owner_id = 0;  /* Module owner of APP */
@@ -27,6 +31,7 @@ VMCHAR filename[VM_FS_MAX_PATH_LENGTH] = {0};
 VMWCHAR wfilename[VM_FS_MAX_PATH_LENGTH] = {0};
 char buffer[256];
 char buffer2[256];
+int led_color = 2;  //  Blue is default LED color.
 
 void log_to_file(const char *log)
 {
@@ -65,10 +70,12 @@ void log_to_file(const char *log)
 
 void gpio_init(void)
 {
-    //  Init the GPIO for the LED.
-    gpio_handle = vm_dcl_open(VM_DCL_GPIO, 12);  //  Blue
-    vm_dcl_control(gpio_handle, VM_DCL_GPIO_COMMAND_SET_MODE_0, NULL);
-    vm_dcl_control(gpio_handle, VM_DCL_GPIO_COMMAND_SET_DIRECTION_OUT, NULL);
+    //  Init the GPIO for each LED (red. green, blue).
+    for (int i = 0; i < MAX_LED; i++) {
+        gpio_handle[i] = vm_dcl_open(VM_DCL_GPIO, GPIO_LED[i]);
+        vm_dcl_control(gpio_handle[i], VM_DCL_GPIO_COMMAND_SET_MODE_0, NULL);
+        vm_dcl_control(gpio_handle[i], VM_DCL_GPIO_COMMAND_SET_DIRECTION_OUT, NULL);
+    }
 }
 
 void uart_irq_handler(void* parameter, VM_DCL_EVENT event, VM_DCL_HANDLE device_handle){
@@ -86,6 +93,7 @@ void uart_irq_handler(void* parameter, VM_DCL_EVENT event, VM_DCL_HANDLE device_
             log_to_file("uart_irq_handler: read failed");
             return;
         }
+        led_color = 0;  //  Blink Red when data received.
         snprintf(buffer, sizeof(buffer), "uart_irq_handler: read length = %d", returned_len); log_to_file(buffer);
         if (returned_len >= 0) buffer[returned_len] = 0;
         log_to_file(data);
@@ -121,15 +129,18 @@ void sys_timer_callback(VM_TIMER_ID_PRECISE sys_timer_id, void* user_data)
 {
     //  This call back happens every 5 seconds.  We flash blue if no data received, else we flash red.
     static int out = 0;
+    static int last_led_color = 0;
     out = 1 - out;
     if (out) {
-        vm_dcl_control(gpio_handle, VM_DCL_GPIO_COMMAND_WRITE_HIGH, NULL);
+        last_led_color = led_color;
+        led_color = 2;  //  Blue is default color of LED.
+        vm_dcl_control(gpio_handle[last_led_color], VM_DCL_GPIO_COMMAND_WRITE_HIGH, NULL);
     } else {
-        vm_dcl_control(gpio_handle, VM_DCL_GPIO_COMMAND_WRITE_LOW, NULL);
+        vm_dcl_control(gpio_handle[last_led_color], VM_DCL_GPIO_COMMAND_WRITE_LOW, NULL);
     }
     log_to_file(out ? "sys_timer_callback: led on" : "sys_timer_callback: led off");
     //  Send a sample command.
-    send_uart_data((unsigned char []) cmd, strlen(cmd));
+    send_uart_data((unsigned char *) cmd, strlen(cmd));
 }
 
 void handle_sysevt(VMINT message, VMINT param) {
