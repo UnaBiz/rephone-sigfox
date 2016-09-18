@@ -75,7 +75,7 @@ void handle_sysevt(VMINT message, VMINT param)
     switch(message) {
     case VM_EVENT_CREATE:
         gpio_init();
-        sys_timer_id = vm_timer_create_precise(1000, sys_timer_callback, NULL);
+        sys_timer_id = vm_timer_create_precise(5000, sys_timer_callback, NULL);
         break;
     case VM_EVENT_QUIT:
         break;
