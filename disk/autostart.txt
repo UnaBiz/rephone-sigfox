@@ -1,2 +1,2 @@
 [autostart]
-App=C:\MRE\blink.vxp
+App=C:\MRE\run-uart.vxp

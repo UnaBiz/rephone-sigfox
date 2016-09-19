@@ -14,7 +14,6 @@ It reads data with vm_dcl_read and then writes same data through UART1 with vm_d
 #include "../include/vmdcl_sio.h"
 #include "../include/vmfs.h"
 #include "../include/vmchset.h"
-#include "../include/vmboard.h"
 #include <stdio.h>
 #include <string.h>
 
@@ -182,7 +181,25 @@ void handle_sysevt(VMINT message, VMINT param) {
     }
 }
 
+void test_log()
+{
+    //  Write the log to the log file c:\log.txt and debug console.
+    VM_FS_HANDLE filehandle = -1;
+    VMUINT writelen = 0;
+    strcpy(filename, "c:\\log1.txt");
+    vm_chset_ascii_to_ucs2(wfilename, sizeof(wfilename), filename);
+    //  Create file.
+    filehandle = vm_fs_open(wfilename, VM_FS_MODE_APPEND, FALSE);
+    if (filehandle < 0) return;
+    //  Write file.
+    VM_RESULT ret = vm_fs_write(filehandle, "test\n", 5, &writelen);
+    if (ret < 0) return;
+    //  Close file.
+    vm_fs_close(filehandle);
+}
+
 void vm_main(void){
+    test_log();
     //  This is the entry point for the program. We register the handlers for system events.
     vm_pmng_register_system_event_callback(handle_sysevt);
 }
