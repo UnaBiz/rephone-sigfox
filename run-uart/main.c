@@ -77,7 +77,7 @@ void gpio_init(void)
     }
 }
 
-VMCHAR data[256];
+VMCHAR last_response[256] = {0};
 
 void uart_irq_handler(void __unused * parameter, VM_DCL_EVENT event, VM_DCL_HANDLE device_handle){
     //  Handle received UART data.
@@ -86,15 +86,15 @@ void uart_irq_handler(void __unused * parameter, VM_DCL_EVENT event, VM_DCL_HAND
         VM_DCL_STATUS status;
         VM_DCL_BUFFER_LENGTH returned_len;
         //  Read data into buffer.
-        status = vm_dcl_read(device_handle,(VM_DCL_BUFFER*)data, sizeof(data), &returned_len, (unsigned int) vm_dcl_get_owner_id());
+        status = vm_dcl_read(device_handle,(VM_DCL_BUFFER*)last_response, sizeof(last_response), &returned_len, (unsigned int) vm_dcl_get_owner_id());
         if(status < VM_DCL_STATUS_OK){
             log_to_file("uart_irq_handler: read failed");
             return;
         }
         led_color = 0;  //  Blink Red when data received.
         if (returned_len >= 0) {
-            data[returned_len] = 0;
-            snprintf(buffer, sizeof(buffer), "uart_irq_handler: read length = %d\n%s", (int) returned_len, (char *) data); log_to_file(buffer);
+            last_response[returned_len] = 0;
+            snprintf(buffer, sizeof(buffer), "uart_irq_handler: read length = %d | %s", (int) returned_len, (char *) last_response); log_to_file(buffer);
         }
         else {
             snprintf(buffer, sizeof(buffer), "uart_irq_handler: ERROR read length = %d", (int) returned_len); log_to_file(buffer);
@@ -104,8 +104,7 @@ void uart_irq_handler(void __unused * parameter, VM_DCL_EVENT event, VM_DCL_HAND
 
 void send_uart_data(unsigned char data[], unsigned int len) {
     //  Send data to UART port.
-    snprintf(buffer, sizeof(buffer), "send_uart_data: length = %d", len); log_to_file(buffer);
-    log_to_file((char *) data);
+    snprintf(buffer, sizeof(buffer), "send_uart_data: length = %d | %s", len, (char *) data); log_to_file(buffer);
     if(g_uart_handle != -1){
         //  Write data
         VM_DCL_BUFFER_LENGTH write_len = 0;
@@ -125,7 +124,8 @@ void send_uart_data(unsigned char data[], unsigned int len) {
 }
 
 //  Sample command to be sent.
-const char cmd[] = "AT$SS=31323334\r";
+const char no_echo_cmd[] = "ATE0\r";  //  Suppress echo.
+const char transmit_cmd[] = "AT$SS=31323334\r";  //  Transmit data bytes, up to 12 bytes.
 
 void sys_timer_callback(VM_TIMER_ID_PRECISE  __unused sys_timer_id, void __unused * user_data)
 {
@@ -141,7 +141,11 @@ void sys_timer_callback(VM_TIMER_ID_PRECISE  __unused sys_timer_id, void __unuse
         vm_dcl_control(gpio_handle[last_led_color], VM_DCL_GPIO_COMMAND_WRITE_LOW, NULL);
     }
     log_to_file(out ? "sys_timer_callback: led on" : "sys_timer_callback: led off");
-    //  Send a sample command.
+    //  Send a transmit command.
+    const char *cmd = transmit_cmd;
+    //  If we are getting AT echo, then turn echo off.
+    if (last_response[0] == 'A' && last_response[1] == 'T')
+        cmd = no_echo_cmd;
     send_uart_data((unsigned char *) cmd, strlen(cmd));
 }
 

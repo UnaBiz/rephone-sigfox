@@ -41,8 +41,8 @@
       <file leaf-file-name="main.c" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/run-uart/main.c">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="144">
-              <caret line="80" column="0" selection-start-line="80" selection-start-column="0" selection-end-line="80" selection-end-column="0" />
+            <state relative-caret-position="378">
+              <caret line="101" column="5" selection-start-line="101" selection-start-column="5" selection-end-line="101" selection-end-column="5" />
               <folding>
                 <element signature="e#0#334#0" expanded="true" />
               </folding>
@@ -296,7 +296,7 @@
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="settings.editor.selected.configurable" value="CPPToolchains" />
+    <property name="settings.editor.selected.configurable" value="reference.settingsdialog.IDE.editor.colors.Language Defaults" />
     <property name="settings.editor.splitter.proportion" value="0.2" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="js-jscs-nodeInterpreter" value="$USER_HOME$/.nvm/versions/node/v4.4.3/bin/node" />
@@ -518,7 +518,7 @@
       <workItem from="1474213564454" duration="3692000" />
       <workItem from="1474382316585" duration="1436000" />
       <workItem from="1474386047629" duration="322000" />
-      <workItem from="1474386411974" duration="17022000" />
+      <workItem from="1474386411974" duration="18708000" />
     </task>
     <task id="LOCAL-00001" summary="Added date time logging">
       <created>1474216074001</created>
@@ -597,11 +597,18 @@
       <option name="project" value="LOCAL" />
       <updated>1474402782148</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="Fixing serial I/O">
+      <created>1474403634562</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1474403634562</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="31405000" />
+    <option name="totallyTimeSpent" value="33091000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -675,7 +682,8 @@
     <MESSAGE value="Added file functions" />
     <MESSAGE value="Fixing linker script" />
     <MESSAGE value="Fixed linker script" />
-    <option name="LAST_COMMIT_MESSAGE" value="Fixed linker script" />
+    <MESSAGE value="Fixing serial I/O" />
+    <option name="LAST_COMMIT_MESSAGE" value="Fixing serial I/O" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
@@ -998,8 +1006,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/run-uart/main.c">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="144">
-          <caret line="80" column="0" selection-start-line="80" selection-start-column="0" selection-end-line="80" selection-end-column="0" />
+        <state relative-caret-position="378">
+          <caret line="101" column="5" selection-start-line="101" selection-start-column="5" selection-end-line="101" selection-end-column="5" />
           <folding>
             <element signature="e#0#334#0" expanded="true" />
           </folding>
