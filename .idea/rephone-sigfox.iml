@@ -2,8 +2,10 @@
 <module type="CPP_MODULE" version="4">
   <component name="NewModuleRootManager">
     <content url="file://$MODULE_DIR$">
+      <sourceFolder url="file://$MODULE_DIR$/run-uart/lstorage.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/run-uart/CMakeLists.txt" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/run-uart/main.c" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/run-uart/lstorage.c" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/CMakeLists.txt" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/lib/LINKIT10/armgcc/scat.ld" isTestSource="false" />
     </content>
