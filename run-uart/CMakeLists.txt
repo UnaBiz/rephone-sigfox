@@ -27,7 +27,7 @@ set(LINKER_SCRIPT "${WORKSPACE_PATH}lib/LINKIT10/armgcc/scat.ld")
 link_directories(${WORKSPACE_PATH}lib)
 link_libraries(${WORKSPACE_PATH}lib/LINKIT10/armgcc/percommon.a -lm)
 
-add_executable(${PROJECT_NAME}.elf ${USER_SOURCES} ${COMMON_SOURCES} ${LINKER_SCRIPT})
+add_executable(${PROJECT_NAME}.elf ${USER_SOURCES} ${COMMON_SOURCES} ${LINKER_SCRIPT} ${WORKSPACE_PATH}common/lcd_sitronix_st7789s ${WORKSPACE_PATH}common/tp_goodix_gt9xx ${WORKSPACE_PATH}common/tp_i2c)
 target_link_libraries(${PROJECT_NAME}.elf)
 
 ###############################################################################
@@ -35,39 +35,47 @@ set(GCC_BIN "/eclipse/LINKIT_ASSIST_SDK/tools/gcc-arm-none-eabi-4_9-2014q4-20141
 set(AS      ${GCC_BIN}arm-none-eabi-as)
 set(CC      ${GCC_BIN}arm-none-eabi-gcc)
 set(CPP     ${GCC_BIN}arm-none-eabi-g++)
-set(LD      ${GCC_BIN}arm-none-eabi-gcc)
+set(LD      ${GCC_BIN}arm-none-eabi-ld)
 set(OBJCOPY ${GCC_BIN}arm-none-eabi-objcopy)
 set(OBJDUMP ${GCC_BIN}arm-none-eabi-objdump)
 set(SIZE    ${GCC_BIN}arm-none-eabi-size)
+set(AR      ${GCC_BIN}arm-none-eabi-ar)
 
 set(PACK    "python2.7 ${WORKSPACE_PATH}tools/packtag.py")
 set(PUSH    "@echo set RePhone into storage mode, put ${PROJECT_NAME}.vxp into MRE directory and replace vxp file name with ${PROJECT_NAME}.vxp")
 
 set(CPU "-mcpu=arm7tdmi-s -mthumb -mlittle-endian")
 #set(CC_FLAGS "${CPU} -c -fvisibility=hidden -fpic -O2")
-set(CC_FLAGS "${CPU} -fvisibility=hidden -fpic -O2")
+set(CC_FLAGS "-fvisibility=hidden -fpic -O2")
 
-set(LD_FLAGS "${CPU} -O2 -Wl,--gc-sections --specs=nosys.specs -fpic -pie -Wl,-Map=$(PROJECT).map  -Wl,--entry=gcc_entry -Wl,--unresolved-symbols=report-all -Wl,--warn-common -Wl,--warn-unresolved-symbols")
+#set(LD_FLAGS "-O2 -Wl,--gc-sections --specs=nosys.specs -fpic -pie -Wl,-Map=${PROJECT}.map  -Wl,--entry=gcc_entry -Wl,--unresolved-symbols=report-all -Wl,--warn-common -Wl,--warn-unresolved-symbols")
+set(LD_FLAGS "-O2 -fpic -pie")
 set(LD_SYS_LIBS "")
+
+set(CMAKE_CXX_FLAGS "${CC_FLAGS} ${CC_SYMBOLS} ${CPU} -c -std=c++11")
+set(CMAKE_C_FLAGS "${CC_FLAGS} ${CC_SYMBOLS} ${CPU} -c -std=gnu99")
+set(CMAKE_EXE_LINKER_FLAGS ${LD_FLAGS})
 
 ################################################################
 # specify the cross compiler
-INCLUDE(CMakeForceCompiler)
-SET(CMAKE_SYSTEM_NAME Generic)
-SET(CMAKE_SYSTEM_VERSION 1)
-CMAKE_FORCE_C_COMPILER(${CC} GNU)
-CMAKE_FORCE_CXX_COMPILER(${CPP} GNU)
+#INCLUDE(CMakeForceCompiler)
+#SET(CMAKE_SYSTEM_NAME Generic)
+#SET(CMAKE_SYSTEM_VERSION 1)
+#CMAKE_FORCE_C_COMPILER(${CC} GNU)
+#CMAKE_FORCE_CXX_COMPILER(${CPP} GNU)
 #set(CMAKE_ASM_COMPILER  ${AS})
-#set(CMAKE_C_COMPILER ${CC})
-#set(CMAKE_CXX_COMPILER ${CPP})
-#set(CMAKE_C_LINK_EXECUTABLE ${LD})
-#set(CMAKE_CXX_LINK_EXECUTABLE ${LD})
-
-set(CMAKE_CXX_FLAGS "${CC_FLAGS} ${CC_SYMBOLS} -std=c++11")
-set(CMAKE_C_FLAGS "${CC_FLAGS} ${CC_SYMBOLS} -std=gnu99")
-set(CMAKE_EXE_LINKER_FLAGS ${LD_FLAGS})
+set(CMAKE_AR ${AR})
+set(CMAKE_C_COMPILER ${CC})
+set(CMAKE_CXX_COMPILER ${CPP})
+set(CMAKE_C_LINK_EXECUTABLE "${LD} ${LD_FLAGS} -T${LINKER_SCRIPT} ${LIBRARY_PATHS} -o ${PROJECT_NAME}.elf ${LIBRARIES} ${LD_SYS_LIBS} ${CMAKE_CURRENT_BINARY_DIR}/*")
+set(CMAKE_CXX_LINK_EXECUTABLE "${LD} ${LD_FLAGS} -T${LINKER_SCRIPT} ${LIBRARY_PATHS} -o ${PROJECT_NAME}.elf ${LIBRARIES} ${LD_SYS_LIBS} ${CMAKE_CURRENT_BINARY_DIR}/*")
 
 #add_custom_command(TARGET ${PROJECT_NAME}.elf POST_BUILD
 #        COMMAND ${CMAKE_OBJCOPY} -Oihex $<TARGET_FILE:${PROJECT_NAME}.elf> ${HEX_FILE}
 #        COMMAND ${CMAKE_OBJCOPY} -Obinary $<TARGET_FILE:${PROJECT_NAME}.elf> ${BIN_FILE}
 #        COMMENT "Building ${HEX_FILE} \nBuilding ${BIN_FILE}")
+
+#add_custom_command(OUTPUT $(PROJECT_NAME).elf
+#    COMMAND $(LD) $(LD_FLAGS) -T$(LINKER_SCRIPT) $(LIBRARY_PATHS) -o $@ -Wl,--start-group $^ $(LIBRARIES) $(LD_SYS_LIBS) -Wl,--end-group
+#)
+
