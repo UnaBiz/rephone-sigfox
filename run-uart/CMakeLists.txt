@@ -31,6 +31,7 @@ add_executable(${PROJECT_NAME}.elf ${USER_SOURCES} ${COMMON_SOURCES} ${LINKER_SC
 target_link_libraries(${PROJECT_NAME}.elf)
 
 ###############################################################################
+set(GCC_BIN "/eclipse/LINKIT_ASSIST_SDK/tools/gcc-arm-none-eabi-4_9-2014q4-20141203-win32/bin/")
 set(AS      ${GCC_BIN}arm-none-eabi-as)
 set(CC      ${GCC_BIN}arm-none-eabi-gcc)
 set(CPP     ${GCC_BIN}arm-none-eabi-g++)
@@ -43,7 +44,8 @@ set(PACK    "python2.7 ${WORKSPACE_PATH}tools/packtag.py")
 set(PUSH    "@echo set RePhone into storage mode, put ${PROJECT_NAME}.vxp into MRE directory and replace vxp file name with ${PROJECT_NAME}.vxp")
 
 set(CPU "-mcpu=arm7tdmi-s -mthumb -mlittle-endian")
-set(CC_FLAGS "${CPU} -c -fvisibility=hidden -fpic -O2")
+#set(CC_FLAGS "${CPU} -c -fvisibility=hidden -fpic -O2")
+set(CC_FLAGS "${CPU} -fvisibility=hidden -fpic -O2")
 
 set(LD_FLAGS "${CPU} -O2 -Wl,--gc-sections --specs=nosys.specs -fpic -pie -Wl,-Map=$(PROJECT).map  -Wl,--entry=gcc_entry -Wl,--unresolved-symbols=report-all -Wl,--warn-common -Wl,--warn-unresolved-symbols")
 set(LD_SYS_LIBS "")
