@@ -42,15 +42,14 @@ set(OBJDUMP ${GCC_BIN}arm-none-eabi-objdump)
 set(SIZE    ${GCC_BIN}arm-none-eabi-size)
 set(AR      ${GCC_BIN}arm-none-eabi-ar)
 
-set(PACK    "python2.7 ${WORKSPACE_PATH}tools/packtag.py")
+#set(PACK    python2.7 ${WORKSPACE_PATH}tools/packtag.py)
+set(PACK    python ${WORKSPACE_PATH}tools/packtag.py)
 set(PUSH    "@echo set RePhone into storage mode, put ${PROJECT_NAME}.vxp into MRE directory and replace vxp file name with ${PROJECT_NAME}.vxp")
 
 set(CPU "-mcpu=arm7tdmi-s -mthumb -mlittle-endian")
-#set(CC_FLAGS "${CPU} -c -fvisibility=hidden -fpic -O2")
 set(CC_FLAGS "${CPU} -fvisibility=hidden -fpic -O2")
 
 set(LD_FLAGS "-O2 -Wl,--gc-sections --specs=nosys.specs -fpic -pie -Wl,-Map=${PROJECT}.map  -Wl,--entry=gcc_entry -Wl,--unresolved-symbols=report-all -Wl,--warn-common -Wl,--warn-unresolved-symbols")
-#set(LD_FLAGS "-O2 -fpic -pie")
 set(LD_SYS_LIBS "")
 
 set(CMAKE_CXX_FLAGS "${CC_FLAGS} ${CC_SYMBOLS} -c -std=c++11")
@@ -59,21 +58,20 @@ set(CMAKE_EXE_LINKER_FLAGS ${LD_FLAGS})
 
 ################################################################
 # specify the cross compiler
-#INCLUDE(CMakeForceCompiler)
-#SET(CMAKE_SYSTEM_NAME Generic)
-#SET(CMAKE_SYSTEM_VERSION 1)
-#CMAKE_FORCE_C_COMPILER(${CC} GNU)
-#CMAKE_FORCE_CXX_COMPILER(${CPP} GNU)
-#set(CMAKE_ASM_COMPILER  ${AS})
 set(CMAKE_AR ${AR})
 set(CMAKE_C_COMPILER ${CC})
 set(CMAKE_CXX_COMPILER ${CPP})
 
-#file(GLOB_RECURSE ALL_OBJECTS "${PROJECT_BINARY_DIR}common/*.obj")
 set(ALL_OBJECTS "${PROJECT_BINARY_DIR}/CMakeFiles/${PROJECT_NAME}.elf.dir/${PROJECT_NAME}/*.obj")
 
 set(CMAKE_C_LINK_EXECUTABLE "${CC} ${LD_FLAGS} -T${LINKER_SCRIPT} ${LIBRARY_PATHS} -o ${PROJECT_NAME}.elf -Wl,--start-group ${LD_SYS_LIBS} ${ALL_OBJECTS} ${SYS_OBJECTS} ${OBJECTS} ${LIBRARIES} -Wl,--end-group")
 set(CMAKE_CXX_LINK_EXECUTABLE "${CPP} ${LD_FLAGS} -T${LINKER_SCRIPT} ${LIBRARY_PATHS} -o ${PROJECT_NAME}.elf -Wl,--start-group ${LD_SYS_LIBS} ${ALL_OBJECTS} ${SYS_OBJECTS} ${OBJECTS} ${LIBRARIES} -Wl,--end-group")
+
+# Convert .elf to .vxp
+add_custom_command(TARGET ${PROJECT_NAME}.elf POST_BUILD
+        COMMAND ${OBJCOPY} --strip-debug ${PROJECT_NAME}.elf
+        COMMAND ${PACK} ${PROJECT_NAME}.elf ${PROJECT_NAME}.vxp
+)
 
 #add_custom_command(TARGET ${PROJECT_NAME}.elf POST_BUILD
 #        COMMAND ${CMAKE_OBJCOPY} -Oihex $<TARGET_FILE:${PROJECT_NAME}.elf> ${HEX_FILE}
