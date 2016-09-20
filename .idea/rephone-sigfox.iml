@@ -6,12 +6,16 @@
       <sourceFolder url="file://$MODULE_DIR$/run-uart/CMakeLists.txt" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/run-uart/main.c" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/run-uart/lstorage.c" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/common/tp_i2c.o" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/common/lcd_sitronix_st7789s.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/common/tp_i2c.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/common/tp_goodix_gt9xx.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/common/lcd_sitronix_st7789s.c" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/common/lcd_sitronix_st7789s.o" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/common/tp_goodix_gt9xx.c" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/common/tp_i2c.c" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/common/gccmain.o" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/common/tp_goodix_gt9xx.o" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/CMakeLists.txt" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/lib/LINKIT10/armgcc/scat.ld" isTestSource="false" />
     </content>

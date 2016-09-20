@@ -18,14 +18,15 @@ file(GLOB_RECURSE USER_SOURCES "${PROJECT_PATH}/*.c")
 file(GLOB_RECURSE COMMON_SOURCES "${WORKSPACE_PATH}common/*.o")
 
 set(OBJECTS "${WORKSPACE_PATH}common/lcd_sitronix_st7789s.o ${WORKSPACE_PATH}common/tp_goodix_gt9xx.o ${WORKSPACE_PATH}common/tp_i2c.o")
-set(SYS_OBJECTS, ${WORKSPACE_PATH}common/gccmain.o)
+set(SYS_OBJECTS ${WORKSPACE_PATH}common/gccmain.o)
 
 include_directories(${WORKSPACE_PATH}include)
 include_directories(${WORKSPACE_PATH}common)
 
 set(LINKER_SCRIPT "${WORKSPACE_PATH}lib/LINKIT10/armgcc/scat.ld")
 link_directories(${WORKSPACE_PATH}lib)
-link_libraries(${WORKSPACE_PATH}lib/LINKIT10/armgcc/percommon.a -lm)
+#link_libraries(${WORKSPACE_PATH}lib/LINKIT10/armgcc/percommon.a -lm)
+set(LIBRARIES "${WORKSPACE_PATH}lib/LINKIT10/armgcc/percommon.a -lm")
 
 add_executable(${PROJECT_NAME}.elf ${USER_SOURCES} ${COMMON_SOURCES} ${LINKER_SCRIPT} ${WORKSPACE_PATH}common/lcd_sitronix_st7789s ${WORKSPACE_PATH}common/tp_goodix_gt9xx ${WORKSPACE_PATH}common/tp_i2c)
 target_link_libraries(${PROJECT_NAME}.elf)
@@ -46,14 +47,14 @@ set(PUSH    "@echo set RePhone into storage mode, put ${PROJECT_NAME}.vxp into M
 
 set(CPU "-mcpu=arm7tdmi-s -mthumb -mlittle-endian")
 #set(CC_FLAGS "${CPU} -c -fvisibility=hidden -fpic -O2")
-set(CC_FLAGS "-fvisibility=hidden -fpic -O2")
+set(CC_FLAGS "${CPU} -fvisibility=hidden -fpic -O2")
 
-#set(LD_FLAGS "-O2 -Wl,--gc-sections --specs=nosys.specs -fpic -pie -Wl,-Map=${PROJECT}.map  -Wl,--entry=gcc_entry -Wl,--unresolved-symbols=report-all -Wl,--warn-common -Wl,--warn-unresolved-symbols")
-set(LD_FLAGS "-O2 -fpic -pie")
+set(LD_FLAGS "-O2 -Wl,--gc-sections --specs=nosys.specs -fpic -pie -Wl,-Map=${PROJECT}.map  -Wl,--entry=gcc_entry -Wl,--unresolved-symbols=report-all -Wl,--warn-common -Wl,--warn-unresolved-symbols")
+#set(LD_FLAGS "-O2 -fpic -pie")
 set(LD_SYS_LIBS "")
 
-set(CMAKE_CXX_FLAGS "${CC_FLAGS} ${CC_SYMBOLS} ${CPU} -c -std=c++11")
-set(CMAKE_C_FLAGS "${CC_FLAGS} ${CC_SYMBOLS} ${CPU} -c -std=gnu99")
+set(CMAKE_CXX_FLAGS "${CC_FLAGS} ${CC_SYMBOLS} -c -std=c++11")
+set(CMAKE_C_FLAGS "${CC_FLAGS} ${CC_SYMBOLS} -c -std=gnu99")
 set(CMAKE_EXE_LINKER_FLAGS ${LD_FLAGS})
 
 ################################################################
@@ -67,8 +68,8 @@ set(CMAKE_EXE_LINKER_FLAGS ${LD_FLAGS})
 set(CMAKE_AR ${AR})
 set(CMAKE_C_COMPILER ${CC})
 set(CMAKE_CXX_COMPILER ${CPP})
-set(CMAKE_C_LINK_EXECUTABLE "${LD} ${LD_FLAGS} -T${LINKER_SCRIPT} ${LIBRARY_PATHS} -o ${PROJECT_NAME}.elf ${LIBRARIES} ${LD_SYS_LIBS} ${CMAKE_CURRENT_BINARY_DIR}/*")
-set(CMAKE_CXX_LINK_EXECUTABLE "${LD} ${LD_FLAGS} -T${LINKER_SCRIPT} ${LIBRARY_PATHS} -o ${PROJECT_NAME}.elf ${LIBRARIES} ${LD_SYS_LIBS} ${CMAKE_CURRENT_BINARY_DIR}/*")
+set(CMAKE_C_LINK_EXECUTABLE "${CC} ${LD_FLAGS} -T${LINKER_SCRIPT} ${LIBRARY_PATHS} -o ${PROJECT_NAME}.elf -Wl,--start-group ${LD_SYS_LIBS} ${SYS_OBJECTS} ${OBJECTS} ${LIBRARIES} -Wl,--end-group")
+set(CMAKE_CXX_LINK_EXECUTABLE "${CPP} ${LD_FLAGS} -T${LINKER_SCRIPT} ${LIBRARY_PATHS} -o ${PROJECT_NAME}.elf -Wl,--start-group ${LD_SYS_LIBS} ${SYS_OBJECTS} ${OBJECTS} ${LIBRARIES} -Wl,--end-group")
 
 #add_custom_command(TARGET ${PROJECT_NAME}.elf POST_BUILD
 #        COMMAND ${CMAKE_OBJCOPY} -Oihex $<TARGET_FILE:${PROJECT_NAME}.elf> ${HEX_FILE}
