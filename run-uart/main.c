@@ -77,11 +77,12 @@ void gpio_init(void)
     }
 }
 
+VMCHAR data[256];
+
 void uart_irq_handler(void __unused * parameter, VM_DCL_EVENT event, VM_DCL_HANDLE device_handle){
     //  Handle received UART data.
     if(event == VM_DCL_SIO_UART_READY_TO_READ){
         //  Data has arrived.
-        VMCHAR data[256];
         VM_DCL_STATUS status;
         VM_DCL_BUFFER_LENGTH returned_len;
         //  Read data into buffer.
@@ -91,9 +92,13 @@ void uart_irq_handler(void __unused * parameter, VM_DCL_EVENT event, VM_DCL_HAND
             return;
         }
         led_color = 0;  //  Blink Red when data received.
-        snprintf(buffer, sizeof(buffer), "uart_irq_handler: read length = %d", (int) returned_len); log_to_file(buffer);
-        if (returned_len >= 0) buffer[returned_len] = 0;
-        log_to_file((char *) data);
+        if (returned_len >= 0) {
+            data[returned_len] = 0;
+            snprintf(buffer, sizeof(buffer), "uart_irq_handler: read length = %d\n%s", (int) returned_len, (char *) data); log_to_file(buffer);
+        }
+        else {
+            snprintf(buffer, sizeof(buffer), "uart_irq_handler: ERROR read length = %d", (int) returned_len); log_to_file(buffer);
+        }
     }
 }
 
