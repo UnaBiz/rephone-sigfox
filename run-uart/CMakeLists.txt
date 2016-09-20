@@ -71,6 +71,7 @@ set(CMAKE_CXX_LINK_EXECUTABLE "${CPP} ${LD_FLAGS} -T${LINKER_SCRIPT} ${LIBRARY_P
 add_custom_command(TARGET ${PROJECT_NAME}.elf POST_BUILD
         COMMAND ${OBJCOPY} --strip-debug ${PROJECT_NAME}.elf
         COMMAND ${PACK} ${PROJECT_NAME}.elf ${PROJECT_NAME}.vxp
+        COMMAND copy /y ${PROJECT_NAME}.vxp F:\\MRE\\${PROJECT_NAME}.vxp && echo "********************** Copied VXP to device"
 )
 
 #add_custom_command(TARGET ${PROJECT_NAME}.elf POST_BUILD

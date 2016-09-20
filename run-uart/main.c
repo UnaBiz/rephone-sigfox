@@ -39,17 +39,17 @@ void log_to_file(const char *log)
     vm_date_time_t time;
     VMINT ret = vm_time_get_date_time(&time);
     if (ret >= 0) {  //  Add the date time to the log.
-        snprintf(buffer2, sizeof(buffer2), "%04d-%02d-%02d %02d:%02d:%02d: %s", time.year, time.month, time.day,
+        snprintf(buffer2, sizeof(buffer2), "%04d-%02d-%02d %02d:%02d:%02d: %s\n", time.year, time.month, time.day,
                  time.hour, time.minute, time.second, log);
     }
     else {
-        snprintf(buffer2, sizeof(buffer2), "%s", log);
+        snprintf(buffer2, sizeof(buffer2), "%s\n", log);
     }
     VMUINT writelen = 0;
     vm_log_info(log);
     if (filename[0] == 0) {  //  Compose the filename c:\log.txt.
         snprintf((char *) filename, VM_FS_MAX_PATH_LENGTH, "%c:\\%s", vm_fs_get_internal_drive_letter(), "log.txt");
-        vm_chset_ascii_to_ucs2(wfilename, sizeof(wfilename), filename);
+        vm_chset_ascii_to_ucs2(wfilename, VM_FS_MAX_PATH_LENGTH, filename);
     }
     //  Create file.
     VM_FS_HANDLE filehandle = vm_fs_open(wfilename, VM_FS_MODE_APPEND, TRUE);
@@ -120,7 +120,7 @@ void send_uart_data(unsigned char data[], unsigned int len) {
 }
 
 //  Sample command to be sent.
-const char cmd[] = "AT\r";
+const char cmd[] = "AT$SS=31323334\r";
 
 void sys_timer_callback(VM_TIMER_ID_PRECISE  __unused sys_timer_id, void __unused * user_data)
 {
@@ -184,11 +184,14 @@ void handle_sysevt(VMINT message, VMINT  __unused param) {
 void test_log()
 {
     //  Write the log to the log file c:\log.txt and debug console.
+    VMCHAR filename2[VM_FS_MAX_PATH_LENGTH] = {0};
+    VMWCHAR wfilename2[VM_FS_MAX_PATH_LENGTH] = {0};
     VMUINT writelen = 0;
-    strcpy((char *) filename, "c:\\log1.txt");
-    vm_chset_ascii_to_ucs2(wfilename, sizeof(wfilename), filename);
+    strcpy((char *) filename2, "c:\\log1.txt");
+    //snprintf((char *) filename, VM_FS_MAX_PATH_LENGTH, "%c:\\%s", vm_fs_get_internal_drive_letter(), "log.txt");
+    vm_chset_ascii_to_ucs2(wfilename2, VM_FS_MAX_PATH_LENGTH, filename2);
     //  Create file.
-    VM_FS_HANDLE filehandle = vm_fs_open(wfilename, VM_FS_MODE_APPEND, FALSE);
+    VM_FS_HANDLE filehandle = vm_fs_open(wfilename2, VM_FS_MODE_APPEND, FALSE);
     if (filehandle < 0) return;
     //  Write file.
     VM_RESULT ret = vm_fs_write(filehandle, "test\n", 5, &writelen);
