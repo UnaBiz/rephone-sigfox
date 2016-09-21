@@ -22,16 +22,8 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module-library">
       <library name="Header Search Paths">
-        <CLASSES>
-          <root url="file://C:/eclipse/LINKIT_ASSIST_SDK/tools/gcc-arm-none-eabi-4_9-2014q4-20141203-win32/lib/gcc/arm-none-eabi/4.9.3/include" />
-          <root url="file://C:/eclipse/LINKIT_ASSIST_SDK/tools/gcc-arm-none-eabi-4_9-2014q4-20141203-win32/lib/gcc/arm-none-eabi/4.9.3/include-fixed" />
-          <root url="file://C:/eclipse/LINKIT_ASSIST_SDK/tools/gcc-arm-none-eabi-4_9-2014q4-20141203-win32/arm-none-eabi/include" />
-        </CLASSES>
-        <SOURCES>
-          <root url="file://C:/eclipse/LINKIT_ASSIST_SDK/tools/gcc-arm-none-eabi-4_9-2014q4-20141203-win32/lib/gcc/arm-none-eabi/4.9.3/include" />
-          <root url="file://C:/eclipse/LINKIT_ASSIST_SDK/tools/gcc-arm-none-eabi-4_9-2014q4-20141203-win32/lib/gcc/arm-none-eabi/4.9.3/include-fixed" />
-          <root url="file://C:/eclipse/LINKIT_ASSIST_SDK/tools/gcc-arm-none-eabi-4_9-2014q4-20141203-win32/arm-none-eabi/include" />
-        </SOURCES>
+        <CLASSES />
+        <SOURCES />
       </library>
     </orderEntry>
   </component>
