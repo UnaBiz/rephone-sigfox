@@ -1,0 +1,1 @@
+This example shows how to connect to a Bluetooth server as a GATT client and read the RSSI infomation.
