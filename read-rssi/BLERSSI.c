@@ -583,7 +583,8 @@ void app_client_vmt_scan_result_callback(void *context_handle, vm_bt_gatt_addres
 	////  Connect one beacon at a time. The board doesn't support multiple connections.
     if(g_appc_cntx.context_handle == context_handle)
     {
-		vm_bt_gatt_client_scan(context_handle,VM_FALSE);
+        ////  Continue scanning for my beacons but connect one at a time.
+		////vm_bt_gatt_client_scan(context_handle,VM_FALSE);
 		vm_bt_gatt_client_connect(context_handle, bd_addr, VM_TRUE);
 		vm_log_debug("[AppClient] dev index:%d", idx);
     }
@@ -612,6 +613,7 @@ static void app_client_read_remote_rssi_callback(void *context_handle, VMBOOL st
     }
     ////  Disconnect after getting RSSI.  Continue with next beacon.
     vm_bt_gatt_client_disconnect(context_handle, bd_addr);
+    g_appc_cntx.context_handle = context_handle;
 }
 
 void app_client_connection_callback(vm_bt_gatt_connection_t *conn, VMBOOL connected, vm_bt_gatt_address_t *bd_addr)
