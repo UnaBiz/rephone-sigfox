@@ -89,6 +89,7 @@ vm_bt_gatt_attribute_value_t         char_value;
 
 VMINT        layer_hdl[1];    /* layer handle array. */
 
+int exiting = 0;
 
 /****************************************************************************
  * FUNCTION DECLARATION
@@ -205,14 +206,22 @@ typedef struct
     vm_bt_gatt_connection_t conn;
     vm_bt_gatt_address_t bd_addr;
 }RSSI_T;
+
 void timer_cb(VM_TIMER_ID_NON_PRECISE tid, void* user_data)
 {
     vm_log_debug("timer_cb user_data[0x%x]", user_data);
+    ////  Kill the timer.
+    vm_timer_delete_non_precise(tid);
     if (0x1 == user_data)
     {
         app_client_check_bt_on_off();
-        vm_timer_delete_non_precise(tid);
     }
+    else if (0x2 == user_data)
+	{
+    	////  Restart.
+    	exiting = 1;
+    	vm_pmng_restart_application();
+	}
     else
     {
         RSSI_T * rssi = (RSSI_T *)user_data;
@@ -228,8 +237,27 @@ void timer_cb(VM_TIMER_ID_NON_PRECISE tid, void* user_data)
     }
 }
 
+void handle_sysevt(VMINT message, VMINT param) {
+    //  The callback to be invoked by the system engine.
+    switch (message){
+        case VM_EVENT_CREATE: {
+            VM_TIMER_ID_NON_PRECISE timer_id = 0;
+            timer_id = vm_timer_create_non_precise(5000, (vm_timer_non_precise_callback)timer_cb, 0x1);
+            vm_log_debug("create timer [%d]", timer_id);
+            break;
+        }
+        case VM_EVENT_QUIT:
+        	app_client_deinit();
+        	break;
+        default:
+            break;
+    }
+}
 
 void vm_main(void) {
+    //  This is the entry point for the program. We register the handlers for system events.
+    vm_pmng_register_system_event_callback(handle_sysevt);
+
     /* initialize layer handle */
     //layer_hdl[0] = -1;
 
@@ -244,13 +272,9 @@ void vm_main(void) {
 
     /* Init MRE resource */
     //vm_res_init();
-
-    VM_TIMER_ID_NON_PRECISE timer_id = 0;
-    timer_id = vm_timer_create_non_precise(1000, (vm_timer_non_precise_callback)timer_cb, 0x1);
-    vm_log_debug("create timer [%d]", timer_id);
 }
 
-void handle_sysevt(VMINT message, VMINT param) {
+//void handle_sysevt(VMINT message, VMINT param) {
 //#ifdef        SUPPORT_BG
 ///* The application updates the screen when receiving the message VM_MSG_PAINT
 //*  that is sent after the application is activated. The application can skip
@@ -334,7 +358,7 @@ void handle_sysevt(VMINT message, VMINT param) {
 //        break;
 //    }
 //#endif
-}
+//}
 
 void handle_keyevt(VMINT event, VMINT keycode) {
     /* press any key and return*/
@@ -466,6 +490,7 @@ void app_client_init(void)
 
 void app_client_register_client_callback(void *context_handle, VMBOOL status, VMUINT8 app_uuid[16])
 {
+	if (exiting) return;
     vm_log_debug("[AppClient] reg_cb status %d state %d!\n", status, g_appc_cntx.state);
     if(memcmp(app_uuid, g_appc_cntx.uid, sizeof(g_appc_cntx.uid)) == 0)
     {
@@ -503,6 +528,7 @@ void app_client_register_client_callback(void *context_handle, VMBOOL status, VM
 
 void app_client_listen_callback(void *context_handle, VMBOOL status)
 {
+	if (exiting) return;
     vm_log_debug("[AppClient] app_client_listen_callback status %d\n", status);
     if ((g_appc_cntx.context_handle == context_handle) && (NULL != context_handle))
     {
@@ -550,6 +576,7 @@ static VMUINT32 app_client_get_free_index(vm_bt_gatt_address_t *bd_addr)
 
 void connect_next_beacon(void *context_handle) {
 	//  Connect to next beacon in my list of discovered beacons, to get RSSI.
+	if (exiting) return;
     VMUINT32 idx;
     for (idx = 0; idx < MAX_INDEX; idx++)
     {
@@ -592,6 +619,7 @@ void app_client_vmt_scan_result_callback(void *context_handle, vm_bt_gatt_addres
     ////vm_log_debug("[AppClient] scan_cb bd_addr %x:%x:%x:%x:%x:%x",
         ////bd_addr->data[0],bd_addr->data[1],bd_addr->data[2],bd_addr->data[3],bd_addr->data[4],bd_addr->data[5]);
 
+	if (exiting) return;
     ////  Process only our beacons.
     if (bd_addr->data[5] == 0xfd ||
 		bd_addr->data[5] == 0xcf ||
@@ -638,6 +666,7 @@ void app_client_vmt_scan_result_callback(void *context_handle, vm_bt_gatt_addres
 
 static void app_client_read_remote_rssi_callback(void *context_handle, VMBOOL status, vm_bt_gatt_address_t *bd_addr, VMINT32 rssi)
 {
+	if (exiting) return;
     if (rssi)
     {
         if (!status)
@@ -675,6 +704,7 @@ int connect_failed_count = 0;
 
 void app_client_connection_callback(vm_bt_gatt_connection_t *conn, VMBOOL connected, vm_bt_gatt_address_t *bd_addr)
 {
+	if (exiting) return;
     vm_log_debug("[AppClient]connection_cb connected[%d]", connected);
     if (connected)
     {
@@ -688,10 +718,10 @@ void app_client_connection_callback(vm_bt_gatt_connection_t *conn, VMBOOL connec
             vm_log_debug("skipped unaddressed beacon");
         	return;
         }
+        //  Wait a while before getting the RSSI.
 		memcpy(rssi->bd_addr.data, bd_addr->data, sizeof(rssi->bd_addr.data));
-        vm_bt_gatt_client_read_remote_rssi(conn->context_handle, bd_addr); ////
-        ////
-        ////timer_id = vm_timer_create_non_precise(5000, (vm_timer_non_precise_callback)timer_cb, rssi);
+        timer_id = vm_timer_create_non_precise(2000, (vm_timer_non_precise_callback)timer_cb, rssi);
+        ////vm_bt_gatt_client_read_remote_rssi(conn->context_handle, bd_addr); ////
     }
     else {
         ////  If not connected, we disconnect and continue with next beacon.
@@ -702,10 +732,13 @@ void app_client_connection_callback(vm_bt_gatt_connection_t *conn, VMBOOL connec
         ////  Restart if too many errors.
         connect_failed_count++;
         if (connect_failed_count == 2) {
+            VM_TIMER_ID_NON_PRECISE timer_id = 0;
+        	exiting = 1;
         	connect_failed_count = 0;
-            g_appc_cntx.state = APPC_STATUS_DISABLED;
-        	app_client_init();
+            vm_log_debug("*****restarting in 5 seconds");
+            timer_id = vm_timer_create_non_precise(5000, (vm_timer_non_precise_callback)timer_cb, 0x2);
         	return;
+        	//app_client_deinit(); app_client_init();
         }
         connect_next_beacon(conn->context_handle);
         return;
@@ -752,6 +785,7 @@ void app_client_connection_callback(vm_bt_gatt_connection_t *conn, VMBOOL connec
 
 void app_client_search_complete_callback(void *context_handle, VMBOOL status)
 {
+	if (exiting) return;
     vm_log_debug("[AppClient] app_client_search_complete_callback status %d!\n", status);
     if(g_appc_cntx.context_handle == context_handle)
     {
@@ -806,6 +840,7 @@ VMINT  get_appc_service_type(VM_ATT_UUID uu)
 
 void app_client_search_result_callback(vm_bt_gatt_connection_t *conn, vm_bt_gatt_service_info_t *uuid)
 {
+	if (exiting) return;
     //VMINT type = -1;
 
     vm_log_debug("[AppClient] app_client_search_result_callback !\n");
@@ -833,6 +868,7 @@ void app_client_search_result_callback(vm_bt_gatt_connection_t *conn, vm_bt_gatt
 void app_client_get_characteristic_callback(vm_bt_gatt_connection_t *conn, VMBOOL status,
                                     vm_bt_gatt_client_characteristic_t *ch, VM_BT_GATT_CHAR_PROPERTIES properties)
 {
+	if (exiting) return;
     //VMUINT16               char_uuid= appc_convert_array_to_uuid16(*ch->ch_uuid);
     //VMUINT16               svc_uuid = appc_convert_array_to_uuid16(ch->svc_uuid->uuid);
 
@@ -906,6 +942,7 @@ void app_client_get_characteristic_callback(vm_bt_gatt_connection_t *conn, VMBOO
 void app_client_write_characteristic_callback(vm_bt_gatt_connection_t *conn, VMBOOL status,
                                 vm_bt_gatt_client_characteristic_t *ch)
 {
+	if (exiting) return;
     //VMINT  type = -1;
     //VMUINT16  uuid = 0;
 
@@ -946,6 +983,7 @@ void app_client_write_characteristic_callback(vm_bt_gatt_connection_t *conn, VMB
 
 void app_client_execute_write_callback(vm_bt_gatt_connection_t *conn, VMBOOL status)
 {
+	if (exiting) return;
     vm_log_debug("[AppClient] app_client_execute_write_callback !\n");
 
     if(appc_conn_cntx->connection_handle == conn->connection_handle)
@@ -962,6 +1000,7 @@ void app_client_execute_write_callback(vm_bt_gatt_connection_t *conn, VMBOOL sta
 void app_client_read_characteristic_callback(vm_bt_gatt_connection_t *conn, VMBOOL status,
                                 vm_bt_gatt_client_characteristic_t *ch, vm_bt_gatt_attribute_value_t *value)
 {
+	if (exiting) return;
     //VMINT  type = -1;
     //VMUINT16  uuid = 0;
 
