@@ -572,20 +572,20 @@ void app_client_vmt_scan_result_callback(void *context_handle, vm_bt_gatt_addres
             );
     	return;
     }
-    ////
+    ////  Stop adding new beacons if we have seen 10 of our beacons already.  TODO: Support more than 10 beacons.
+    idx = app_client_get_free_index();
+    if (idx >= 10) {
+		vm_log_debug("[AppClient] *****exceeded dev index:%d", idx);
+		return;
+    }
+    ////  Remember all my beacons that were scanned.
+	memcpy(&APP_CLIENT_BD_ADDR_LIST[idx], bd_addr, sizeof(vm_bt_gatt_address_t));
+	////  Connect one beacon at a time. The board doesn't support multiple connections.
     if(g_appc_cntx.context_handle == context_handle)
     {
-        idx = app_client_get_free_index();
-        if (idx < 10)
-        {
-            memcpy(&APP_CLIENT_BD_ADDR_LIST[idx], bd_addr, sizeof(vm_bt_gatt_address_t));
-            //if ((memcmp(&server_addr, &(bd_addr->data), VM_BT_GATT_ADDRESS_SIZE) == 0))
-            {
-                vm_bt_gatt_client_scan(context_handle,VM_FALSE);
-                vm_bt_gatt_client_connect(context_handle, bd_addr, VM_TRUE);
-                vm_log_debug("[AppClient] dev index:%d", idx);
-            }
-        }
+		vm_bt_gatt_client_scan(context_handle,VM_FALSE);
+		vm_bt_gatt_client_connect(context_handle, bd_addr, VM_TRUE);
+		vm_log_debug("[AppClient] dev index:%d", idx);
     }
 }
 
@@ -972,4 +972,3 @@ VMINT app_client_deinit(void)
     }
     return 1;
 }
-
