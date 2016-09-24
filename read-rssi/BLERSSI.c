@@ -216,7 +216,7 @@ void timer_cb(VM_TIMER_ID_NON_PRECISE tid, void* user_data)
     else
     {
         RSSI_T * rssi = (RSSI_T *)user_data;
-        vm_log_debug("to read rssi[%x:%x:%x:%x:%x:%x:%x]",
+        vm_log_debug("to read rssi[%x:%x:%x:%x:%x:%x]",
             rssi->bd_addr.data[5],
             rssi->bd_addr.data[4],
             rssi->bd_addr.data[3],
@@ -518,12 +518,23 @@ const int MAX_INDEX = 10;
 int busy = 0;
 int next_beacon = 0;
 
-static VMUINT32 app_client_get_free_index(void)
+static VMUINT32 app_client_get_free_index(vm_bt_gatt_address_t *bd_addr)
 {
     VMUINT32 idx;
 
     for (idx = 0; idx < MAX_INDEX; idx++)
     {
+    	////  If already exists, return the same index.
+        if (APP_CLIENT_BD_ADDR_LIST[idx].data[0] == bd_addr->data[0]
+         && APP_CLIENT_BD_ADDR_LIST[idx].data[1] == bd_addr->data[1]
+         && APP_CLIENT_BD_ADDR_LIST[idx].data[2] == bd_addr->data[2]
+         && APP_CLIENT_BD_ADDR_LIST[idx].data[3] == bd_addr->data[3]
+         && APP_CLIENT_BD_ADDR_LIST[idx].data[4] == bd_addr->data[4]
+         && APP_CLIENT_BD_ADDR_LIST[idx].data[5] == bd_addr->data[5])
+        {
+            return idx;
+        }
+        ////  Else return the next empty index.
         if (APP_CLIENT_BD_ADDR_LIST[idx].data[0] == 0
          && APP_CLIENT_BD_ADDR_LIST[idx].data[1] == 0
          && APP_CLIENT_BD_ADDR_LIST[idx].data[2] == 0
@@ -552,7 +563,7 @@ void connect_next_beacon(void *context_handle) {
         {
         	vm_bt_gatt_address_t *bd_addr = &(APP_CLIENT_BD_ADDR_LIST[i]);
         	next_beacon = (i + 1) % MAX_INDEX;
-            vm_log_debug("*****connecting to [%x:%x:%x:%x:%x:%x:%x]",
+            vm_log_debug("*****connecting to [%x:%x:%x:%x:%x:%x]",
     			bd_addr->data[5],
     			bd_addr->data[4],
     			bd_addr->data[3],
@@ -586,7 +597,7 @@ void app_client_vmt_scan_result_callback(void *context_handle, vm_bt_gatt_addres
 		bd_addr->data[5] == 0xcf ||
 		bd_addr->data[5] == 0xdc) {
     	//  Proceed to get RSSI.
-        vm_log_debug("*****scanned our beacon [%x:%x:%x:%x:%x:%x:%x]",
+        vm_log_debug("*****scanned our beacon [%x:%x:%x:%x:%x:%x]",
             bd_addr->data[5],
             bd_addr->data[4],
             bd_addr->data[3],
@@ -597,7 +608,7 @@ void app_client_vmt_scan_result_callback(void *context_handle, vm_bt_gatt_addres
     }
     else {
     	//  Skip the unknown beacon.
-        vm_log_debug("skipped2 [%x:%x:%x:%x:%x:%x:%x]",
+        vm_log_debug("skipped unknown beacon [%x:%x:%x:%x:%x:%x]",
 			bd_addr->data[5],
 			bd_addr->data[4],
 			bd_addr->data[3],
@@ -608,7 +619,7 @@ void app_client_vmt_scan_result_callback(void *context_handle, vm_bt_gatt_addres
     	return;
     }
     ////  Stop adding new beacons if we have seen 10 of our beacons already.  TODO: Support more than 10 beacons.
-    idx = app_client_get_free_index();
+    idx = app_client_get_free_index(bd_addr);
     if (idx >= 10) {
 		vm_log_debug("[AppClient] *****exceeded dev index:%d", idx);
 		return;
@@ -629,22 +640,29 @@ static void app_client_read_remote_rssi_callback(void *context_handle, VMBOOL st
 {
     if (rssi)
     {
-        vm_log_debug("app_client_read_remote_rssi_callback[%x:%x:%x:%x:%x:%x:%x]",
-            bd_addr->data[5],
-            bd_addr->data[4],
-            bd_addr->data[3],
-            bd_addr->data[2],
-            bd_addr->data[1],
-            bd_addr->data[0]
-            );
-    }
-    if (!status)
-    {
-        vm_log_debug("*****RSSI is [%d]", rssi);
-    }
-    else
-    {
-        vm_log_debug("*****RSSI reading is FAILED");
+        if (!status)
+        {
+            vm_log_debug("*****RSSI for [%x:%x:%x:%x:%x:%x] is [%d]",
+                bd_addr->data[5],
+                bd_addr->data[4],
+                bd_addr->data[3],
+                bd_addr->data[2],
+                bd_addr->data[1],
+                bd_addr->data[0],
+                rssi
+                );
+        }
+        else
+        {
+            vm_log_debug("******RSSI failed for [%x:%x:%x:%x:%x:%x]",
+                bd_addr->data[5],
+                bd_addr->data[4],
+                bd_addr->data[3],
+                bd_addr->data[2],
+                bd_addr->data[1],
+                bd_addr->data[0]
+                );
+        }
     }
     ////  Disconnect after getting RSSI.  Continue with next beacon.
     vm_bt_gatt_client_disconnect(context_handle, bd_addr);
@@ -653,13 +671,13 @@ static void app_client_read_remote_rssi_callback(void *context_handle, VMBOOL st
     connect_next_beacon(context_handle);
 }
 
+int connect_failed_count = 0;
+
 void app_client_connection_callback(vm_bt_gatt_connection_t *conn, VMBOOL connected, vm_bt_gatt_address_t *bd_addr)
 {
     vm_log_debug("[AppClient]connection_cb connected[%d]", connected);
     if (connected)
     {
-        //vm_bt_gatt_client_read_remote_rssi(conn->context_handle, bd_addr);
-
         VM_TIMER_ID_NON_PRECISE timer_id = 0;
         RSSI_T *rssi = (RSSI_T *)vm_calloc(sizeof(RSSI_T));
         rssi->conn.connection_handle = conn->connection_handle;
@@ -671,14 +689,23 @@ void app_client_connection_callback(vm_bt_gatt_connection_t *conn, VMBOOL connec
         	return;
         }
 		memcpy(rssi->bd_addr.data, bd_addr->data, sizeof(rssi->bd_addr.data));
+        vm_bt_gatt_client_read_remote_rssi(conn->context_handle, bd_addr); ////
         ////
-        timer_id = vm_timer_create_non_precise(5000, (vm_timer_non_precise_callback)timer_cb, rssi);
+        ////timer_id = vm_timer_create_non_precise(5000, (vm_timer_non_precise_callback)timer_cb, rssi);
     }
     else {
         ////  If not connected, we disconnect and continue with next beacon.
         vm_bt_gatt_client_disconnect(conn->context_handle, bd_addr);
         g_appc_cntx.context_handle = conn->context_handle;
         busy = 0;
+
+        ////  Restart if too many errors.
+        connect_failed_count++;
+        if (connect_failed_count == 2) {
+        	connect_failed_count = 0;
+        	app_client_init();
+        	return;
+        }
         connect_next_beacon(conn->context_handle);
         return;
     }
