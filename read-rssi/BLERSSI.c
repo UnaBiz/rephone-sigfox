@@ -637,6 +637,12 @@ void app_client_connection_callback(vm_bt_gatt_connection_t *conn, VMBOOL connec
         ////
         timer_id = vm_timer_create_non_precise(5000, (vm_timer_non_precise_callback)timer_cb, rssi);
     }
+    else {
+        ////  If not connected, we disconnect and continue with next beacon.
+        vm_bt_gatt_client_disconnect(context_handle, bd_addr);
+        g_appc_cntx.context_handle = context_handle;
+        return;
+    }
 
     ////return;
     ////  Read more beacons.

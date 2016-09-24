@@ -17,7 +17,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="5317faea-3b19-427d-bb39-9fbff020deb5" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/rephone-sigfox.iml" afterPath="$PROJECT_DIR$/.idea/rephone-sigfox.iml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/read-rssi/BLERSSI.c" afterPath="$PROJECT_DIR$/read-rssi/BLERSSI.c" />
     </list>
@@ -42,13 +41,13 @@
       <file leaf-file-name="BLERSSI.c" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/read-rssi/BLERSSI.c">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="650">
-              <caret line="616" column="0" selection-start-line="616" selection-start-column="0" selection-end-line="616" selection-end-column="0" />
+            <state relative-caret-position="686">
+              <caret line="645" column="0" selection-start-line="645" selection-start-column="0" selection-end-line="645" selection-end-column="0" />
               <folding>
                 <element signature="e#12696#12728#0" expanded="false" />
-                <element signature="e#28461#29641#0" expanded="true" />
-                <element signature="e#30260#30684#0" expanded="true" />
-                <element signature="e#32083#32661#0" expanded="true" />
+                <element signature="e#28687#29867#0" expanded="true" />
+                <element signature="e#30486#30910#0" expanded="true" />
+                <element signature="e#32309#32887#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -491,7 +490,7 @@
       <workItem from="1474386047629" duration="322000" />
       <workItem from="1474386411974" duration="20027000" />
       <workItem from="1474740982923" duration="1832000" />
-      <workItem from="1474746631476" duration="1347000" />
+      <workItem from="1474746631476" duration="1496000" />
     </task>
     <task id="LOCAL-00001" summary="Added date time logging">
       <created>1474216074001</created>
@@ -598,11 +597,18 @@
       <option name="project" value="LOCAL" />
       <updated>1474741315208</updated>
     </task>
-    <option name="localTasksCounter" value="16" />
+    <task id="LOCAL-00016" summary="Testing mutliple beacons">
+      <created>1474747996441</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1474747996441</updated>
+    </task>
+    <option name="localTasksCounter" value="17" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="37589000" />
+    <option name="totallyTimeSpent" value="37738000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -679,7 +685,8 @@
     <MESSAGE value="Fixing serial I/O" />
     <MESSAGE value="Suppress AT echo" />
     <MESSAGE value="Added read-rssi" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added read-rssi" />
+    <MESSAGE value="Testing mutliple beacons" />
+    <option name="LAST_COMMIT_MESSAGE" value="Testing mutliple beacons" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
@@ -1054,13 +1061,13 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/read-rssi/BLERSSI.c">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="650">
-          <caret line="616" column="0" selection-start-line="616" selection-start-column="0" selection-end-line="616" selection-end-column="0" />
+        <state relative-caret-position="686">
+          <caret line="645" column="0" selection-start-line="645" selection-start-column="0" selection-end-line="645" selection-end-column="0" />
           <folding>
             <element signature="e#12696#12728#0" expanded="false" />
-            <element signature="e#28461#29641#0" expanded="true" />
-            <element signature="e#30260#30684#0" expanded="true" />
-            <element signature="e#32083#32661#0" expanded="true" />
+            <element signature="e#28687#29867#0" expanded="true" />
+            <element signature="e#30486#30910#0" expanded="true" />
+            <element signature="e#32309#32887#0" expanded="true" />
           </folding>
         </state>
       </provider>
