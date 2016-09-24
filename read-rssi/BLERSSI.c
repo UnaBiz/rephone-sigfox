@@ -514,11 +514,15 @@ void app_client_listen_callback(void *context_handle, VMBOOL status)
     }
 }
 
+const int MAX_INDEX = 10;
+int busy = 0;
+int next_beacon = 0;
+
 static VMUINT32 app_client_get_free_index(void)
 {
     VMUINT32 idx;
 
-    for (idx = 0; idx < 10; idx++)
+    for (idx = 0; idx < MAX_INDEX; idx++)
     {
         if (APP_CLIENT_BD_ADDR_LIST[idx].data[0] == 0
          && APP_CLIENT_BD_ADDR_LIST[idx].data[1] == 0
@@ -531,6 +535,37 @@ static VMUINT32 app_client_get_free_index(void)
         }
     }
     return 100;
+}
+
+void connect_next_beacon(void *context_handle) {
+	//  Connect to next beacon in my list of discovered beacons, to get RSSI.
+    VMUINT32 idx;
+    for (idx = 0; idx < MAX_INDEX; idx++)
+    {
+    	int i = (idx + next_beacon) % MAX_INDEX;
+        if (APP_CLIENT_BD_ADDR_LIST[i].data[0] != 0
+         || APP_CLIENT_BD_ADDR_LIST[i].data[1] != 0
+         || APP_CLIENT_BD_ADDR_LIST[i].data[2] != 0
+         || APP_CLIENT_BD_ADDR_LIST[i].data[3] != 0
+         || APP_CLIENT_BD_ADDR_LIST[i].data[4] != 0
+         || APP_CLIENT_BD_ADDR_LIST[i].data[5] != 0)
+        {
+        	vm_bt_gatt_address_t *bd_addr = &(APP_CLIENT_BD_ADDR_LIST[i]);
+        	next_beacon = (i + 1) % MAX_INDEX;
+            vm_log_debug("*****connecting to [%x:%x:%x:%x:%x:%x:%x]",
+    			bd_addr->data[5],
+    			bd_addr->data[4],
+    			bd_addr->data[3],
+    			bd_addr->data[2],
+    			bd_addr->data[1],
+    			bd_addr->data[0]
+                );
+        	busy = 1;
+        	vm_bt_gatt_client_connect(context_handle, bd_addr, VM_TRUE);
+        	return;
+        }
+    }
+    vm_log_debug("no beacons to be connected");
 }
 
 void app_client_vmt_scan_result_callback(void *context_handle, vm_bt_gatt_address_t *bd_addr, VMINT32 rssi, VMUINT8 eir_len, VMUINT8 *eir)
@@ -579,14 +614,14 @@ void app_client_vmt_scan_result_callback(void *context_handle, vm_bt_gatt_addres
 		return;
     }
     ////  Remember all my beacons that were scanned.
+	vm_log_debug("[AppClient] allocated dev index:%d", idx);
 	memcpy(&APP_CLIENT_BD_ADDR_LIST[idx], bd_addr, sizeof(vm_bt_gatt_address_t));
 	////  Connect one beacon at a time. The board doesn't support multiple connections.
-    if(g_appc_cntx.context_handle == context_handle)
+    if(g_appc_cntx.context_handle == context_handle && !busy)
     {
         ////  Continue scanning for my beacons but connect one at a time.
 		////vm_bt_gatt_client_scan(context_handle,VM_FALSE);
-		vm_bt_gatt_client_connect(context_handle, bd_addr, VM_TRUE);
-		vm_log_debug("[AppClient] dev index:%d", idx);
+    	connect_next_beacon(context_handle);
     }
 }
 
@@ -614,6 +649,8 @@ static void app_client_read_remote_rssi_callback(void *context_handle, VMBOOL st
     ////  Disconnect after getting RSSI.  Continue with next beacon.
     vm_bt_gatt_client_disconnect(context_handle, bd_addr);
     g_appc_cntx.context_handle = context_handle;
+    busy = 0;
+    connect_next_beacon(context_handle);
 }
 
 void app_client_connection_callback(vm_bt_gatt_connection_t *conn, VMBOOL connected, vm_bt_gatt_address_t *bd_addr)
@@ -639,8 +676,10 @@ void app_client_connection_callback(vm_bt_gatt_connection_t *conn, VMBOOL connec
     }
     else {
         ////  If not connected, we disconnect and continue with next beacon.
-        vm_bt_gatt_client_disconnect(context_handle, bd_addr);
-        g_appc_cntx.context_handle = context_handle;
+        vm_bt_gatt_client_disconnect(conn->context_handle, bd_addr);
+        g_appc_cntx.context_handle = conn->context_handle;
+        busy = 0;
+        connect_next_beacon(conn->context_handle);
         return;
     }
 
