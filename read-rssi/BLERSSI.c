@@ -703,6 +703,7 @@ void app_client_connection_callback(vm_bt_gatt_connection_t *conn, VMBOOL connec
         connect_failed_count++;
         if (connect_failed_count == 2) {
         	connect_failed_count = 0;
+            g_appc_cntx.state = APPC_STATUS_DISABLED;
         	app_client_init();
         	return;
         }
