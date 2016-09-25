@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.6)
 project(run-uart)
 set(SOURCE_FILES
         main.c
+        blerssi.c
         Makefile
         run-uart.project)
 
@@ -32,7 +33,7 @@ add_executable(${PROJECT_NAME}.elf ${USER_SOURCES} ${COMMON_SOURCES} ${LINKER_SC
 target_link_libraries(${PROJECT_NAME}.elf)
 
 ###############################################################################
-set(GCC_BIN "/eclipse/LINKIT_ASSIST_SDK/tools/gcc-arm-none-eabi-4_9-2014q4-20141203-win32/bin/")
+##set(GCC_BIN "/eclipse/LINKIT_ASSIST_SDK/tools/gcc-arm-none-eabi-4_9-2014q4-20141203-win32/bin/")  ##  Windows
 set(AS      ${GCC_BIN}arm-none-eabi-as)
 set(CC      ${GCC_BIN}arm-none-eabi-gcc)
 set(CPP     ${GCC_BIN}arm-none-eabi-g++)
@@ -42,7 +43,7 @@ set(OBJDUMP ${GCC_BIN}arm-none-eabi-objdump)
 set(SIZE    ${GCC_BIN}arm-none-eabi-size)
 set(AR      ${GCC_BIN}arm-none-eabi-ar)
 
-#set(PACK    python2.7 ${WORKSPACE_PATH}tools/packtag.py)
+set(PACK    python2.7 ${WORKSPACE_PATH}tools/packtag.py)  ##  MacOS.
 set(PACK    python ${WORKSPACE_PATH}tools/packtag.py)
 set(PUSH    "@echo set RePhone into storage mode, put ${PROJECT_NAME}.vxp into MRE directory and replace vxp file name with ${PROJECT_NAME}.vxp")
 
