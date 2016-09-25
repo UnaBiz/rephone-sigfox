@@ -19,7 +19,9 @@ It reads data with vm_dcl_read and then writes same data through UART1 with vm_d
 #include <string.h>
 
 //  TODO: Only for Mac.
+#ifndef __unused
 #define __unused
+#endif  //  __unused
 
 //  LED to GPIO mapping, according to https://github.com/loboris/RePhone_on_Linux/blob/master/Documents/Lua%20on%20RePhone%20Manual.pdf
 const int MAX_LED = 3;

@@ -1,7 +1,7 @@
 
 PROJECT = run-uart
 
-OBJECTS += main.o
+OBJECTS += main.o blerssi.o
 
 WORKSPACE_PATH = ../
 

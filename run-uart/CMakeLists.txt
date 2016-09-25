@@ -43,8 +43,8 @@ set(OBJDUMP ${GCC_BIN}arm-none-eabi-objdump)
 set(SIZE    ${GCC_BIN}arm-none-eabi-size)
 set(AR      ${GCC_BIN}arm-none-eabi-ar)
 
-set(PACK    python2.7 ${WORKSPACE_PATH}tools/packtag.py)  ##  MacOS.
-set(PACK    python ${WORKSPACE_PATH}tools/packtag.py)
+#set(PACK    python ${WORKSPACE_PATH}tools/packtag.py)  ##  Windows
+set(PACK    python2.7 ${WORKSPACE_PATH}tools/packtag.py)  ##  Mac
 set(PUSH    "@echo set RePhone into storage mode, put ${PROJECT_NAME}.vxp into MRE directory and replace vxp file name with ${PROJECT_NAME}.vxp")
 
 set(CPU "-mcpu=arm7tdmi-s -mthumb -mlittle-endian")
@@ -63,7 +63,8 @@ set(CMAKE_AR ${AR})
 set(CMAKE_C_COMPILER ${CC})
 set(CMAKE_CXX_COMPILER ${CPP})
 
-set(ALL_OBJECTS "${PROJECT_BINARY_DIR}/CMakeFiles/${PROJECT_NAME}.elf.dir/${PROJECT_NAME}/*.obj")
+#set(ALL_OBJECTS "${PROJECT_BINARY_DIR}/CMakeFiles/${PROJECT_NAME}.elf.dir/${PROJECT_NAME}/*.obj") # Windows
+set(ALL_OBJECTS ${COMMON_SOURCES}) # Mac
 
 set(CMAKE_C_LINK_EXECUTABLE "${CC} ${LD_FLAGS} -T${LINKER_SCRIPT} ${LIBRARY_PATHS} -o ${PROJECT_NAME}.elf -Wl,--start-group ${LD_SYS_LIBS} ${ALL_OBJECTS} ${SYS_OBJECTS} ${OBJECTS} ${LIBRARIES} -Wl,--end-group")
 set(CMAKE_CXX_LINK_EXECUTABLE "${CPP} ${LD_FLAGS} -T${LINKER_SCRIPT} ${LIBRARY_PATHS} -o ${PROJECT_NAME}.elf -Wl,--start-group ${LD_SYS_LIBS} ${ALL_OBJECTS} ${SYS_OBJECTS} ${OBJECTS} ${LIBRARIES} -Wl,--end-group")
