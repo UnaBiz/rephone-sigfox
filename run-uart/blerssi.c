@@ -645,7 +645,7 @@ void app_client_vmt_scan_result_callback(void *context_handle, vm_bt_gatt_addres
 			bd_addr->data[1],
 			bd_addr->data[0]
             );
-    	return;
+    	////return;  //  Log all beacons.
     }
     ////  Stop adding new beacons if we have seen 10 of our beacons already.  TODO: Support more than 10 beacons.
     idx = app_client_get_free_index(bd_addr);

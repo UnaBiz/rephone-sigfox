@@ -17,13 +17,10 @@
   <component name="ChangeListManager">
     <list default="true" id="5317faea-3b19-427d-bb39-9fbff020deb5" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/run-uart/blerssi.o" afterPath="$PROJECT_DIR$/run-uart/blerssi.o" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/run-uart/main.o" afterPath="$PROJECT_DIR$/run-uart/main.o" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/run-uart/run-uart.elf" afterPath="$PROJECT_DIR$/run-uart/run-uart.elf" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/run-uart/run-uart.vxp" afterPath="$PROJECT_DIR$/run-uart/run-uart.vxp" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/run-uart/blerssi.c" afterPath="$PROJECT_DIR$/run-uart/blerssi.c" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/run-uart/blerssi.h" afterPath="$PROJECT_DIR$/run-uart/blerssi.h" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/run-uart/main.c" afterPath="$PROJECT_DIR$/run-uart/main.c" />
     </list>
     <ignored path="rephone-sigfox.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -123,21 +120,21 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="main.c" pinned="false" current-in-tab="true">
+      <file leaf-file-name="main.c" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/run-uart/main.c">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="307">
+            <state relative-caret-position="-713">
               <caret line="38" column="0" selection-start-line="38" selection-start-column="0" selection-end-line="38" selection-end-column="0" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="blerssi.c" pinned="false" current-in-tab="false">
+      <file leaf-file-name="blerssi.c" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/run-uart/blerssi.c">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="80">
-              <caret line="667" column="7" selection-start-line="667" selection-start-column="7" selection-end-line="667" selection-end-column="7" />
+            <state relative-caret-position="328">
+              <caret line="696" column="9" selection-start-line="696" selection-start-column="9" selection-end-line="696" selection-end-column="9" />
               <folding />
             </state>
           </provider>
@@ -159,8 +156,8 @@
         <option value="$PROJECT_DIR$/run-uart/CMakeLists.txt" />
         <option value="$PROJECT_DIR$/run-uart/Makefile" />
         <option value="$PROJECT_DIR$/run-uart/blerssi.h" />
-        <option value="$PROJECT_DIR$/run-uart/blerssi.c" />
         <option value="$PROJECT_DIR$/run-uart/main.c" />
+        <option value="$PROJECT_DIR$/run-uart/blerssi.c" />
       </list>
     </option>
   </component>
@@ -627,7 +624,7 @@
       <workItem from="1474275277860" duration="2877000" />
       <workItem from="1474406660686" duration="406000" />
       <workItem from="1474429504389" duration="1137000" />
-      <workItem from="1474770584400" duration="3689000" />
+      <workItem from="1474770584400" duration="5042000" />
     </task>
     <task id="LOCAL-00001" summary="Blink program works">
       <created>1474174484374</created>
@@ -671,11 +668,18 @@
       <option name="project" value="LOCAL" />
       <updated>1474773478386</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="Send beacon MAC and RSSI to SIGFOX">
+      <created>1474774409047</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1474774409047</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="15966000" />
+    <option name="totallyTimeSpent" value="17319000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="21" y="44" width="1466" height="908" extended-state="0" />
@@ -739,7 +743,8 @@
     <MESSAGE value="Added images" />
     <MESSAGE value="Adding blerssi" />
     <MESSAGE value="Compiles OK with blerssi" />
-    <option name="LAST_COMMIT_MESSAGE" value="Compiles OK with blerssi" />
+    <MESSAGE value="Send beacon MAC and RSSI to SIGFOX" />
+    <option name="LAST_COMMIT_MESSAGE" value="Send beacon MAC and RSSI to SIGFOX" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
@@ -1125,18 +1130,18 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/run-uart/blerssi.c">
+    <entry file="file://$PROJECT_DIR$/run-uart/main.c">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="80">
-          <caret line="667" column="7" selection-start-line="667" selection-start-column="7" selection-end-line="667" selection-end-column="7" />
+        <state relative-caret-position="-713">
+          <caret line="38" column="0" selection-start-line="38" selection-start-column="0" selection-end-line="38" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/run-uart/main.c">
+    <entry file="file://$PROJECT_DIR$/run-uart/blerssi.c">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="307">
-          <caret line="38" column="0" selection-start-line="38" selection-start-column="0" selection-end-line="38" selection-end-column="0" />
+        <state relative-caret-position="328">
+          <caret line="696" column="9" selection-start-line="696" selection-start-column="9" selection-end-line="696" selection-end-column="9" />
           <folding />
         </state>
       </provider>
