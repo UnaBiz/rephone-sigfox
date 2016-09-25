@@ -16,12 +16,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="5317faea-3b19-427d-bb39-9fbff020deb5" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/run-uart/blerssi.o" afterPath="$PROJECT_DIR$/run-uart/blerssi.o" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/run-uart/main.o" afterPath="$PROJECT_DIR$/run-uart/main.o" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/run-uart/run-uart.elf" afterPath="$PROJECT_DIR$/run-uart/run-uart.elf" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/run-uart/run-uart.vxp" afterPath="$PROJECT_DIR$/run-uart/run-uart.vxp" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/run-uart/CMakeLists.txt" afterPath="$PROJECT_DIR$/run-uart/CMakeLists.txt" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/run-uart/Makefile" afterPath="$PROJECT_DIR$/run-uart/Makefile" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/run-uart/blerssi.c" afterPath="$PROJECT_DIR$/run-uart/blerssi.c" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/run-uart/blerssi.h" afterPath="$PROJECT_DIR$/run-uart/blerssi.h" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/run-uart/main.c" afterPath="$PROJECT_DIR$/run-uart/main.c" />
     </list>
     <ignored path="rephone-sigfox.iws" />
@@ -47,16 +48,6 @@
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="40">
               <caret line="2" column="0" selection-start-line="2" selection-start-column="0" selection-end-line="2" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="lstorage.c" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/run-uart/lstorage.c">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -92,6 +83,26 @@
           </provider>
         </entry>
       </file>
+      <file leaf-file-name="autostart.txt" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/disk/autostart.txt">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="40">
+              <caret line="2" column="0" selection-start-line="2" selection-start-column="0" selection-end-line="2" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="blerssi.h" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/run-uart/blerssi.h">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="120">
+              <caret line="6" column="0" selection-start-line="6" selection-start-column="0" selection-end-line="6" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file leaf-file-name="cdefs.h" pinned="false" current-in-tab="false">
         <entry file="file:///usr/local/Cellar/arm-none-eabi-gcc/5.0-2016-q2-update/arm-none-eabi/include/sys/cdefs.h">
           <provider selected="true" editor-type-id="text-editor">
@@ -102,7 +113,7 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Makefile" pinned="false" current-in-tab="true">
+      <file leaf-file-name="Makefile" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/run-uart/Makefile">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="40">
@@ -112,11 +123,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="main.c" pinned="false" current-in-tab="false">
+      <file leaf-file-name="main.c" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/run-uart/main.c">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-60">
-              <caret line="23" column="20" selection-start-line="23" selection-start-column="20" selection-end-line="23" selection-end-column="20" />
+            <state relative-caret-position="307">
+              <caret line="38" column="0" selection-start-line="38" selection-start-column="0" selection-end-line="38" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -125,18 +136,8 @@
       <file leaf-file-name="blerssi.c" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/run-uart/blerssi.c">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="220">
-              <caret line="26" column="20" selection-start-line="26" selection-start-column="20" selection-end-line="26" selection-end-column="20" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="blerssi.h" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/run-uart/blerssi.h">
-          <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="80">
-              <caret line="4" column="0" selection-start-line="4" selection-start-column="0" selection-end-line="4" selection-end-column="0" />
+              <caret line="667" column="7" selection-start-line="667" selection-start-column="7" selection-end-line="667" selection-end-column="7" />
               <folding />
             </state>
           </provider>
@@ -155,11 +156,11 @@
         <option value="$PROJECT_DIR$/.gitignore" />
         <option value="$PROJECT_DIR$/CMakeLists.txt" />
         <option value="$PROJECT_DIR$/disk/autostart.txt" />
+        <option value="$PROJECT_DIR$/run-uart/CMakeLists.txt" />
+        <option value="$PROJECT_DIR$/run-uart/Makefile" />
         <option value="$PROJECT_DIR$/run-uart/blerssi.h" />
         <option value="$PROJECT_DIR$/run-uart/blerssi.c" />
-        <option value="$PROJECT_DIR$/run-uart/CMakeLists.txt" />
         <option value="$PROJECT_DIR$/run-uart/main.c" />
-        <option value="$PROJECT_DIR$/run-uart/Makefile" />
       </list>
     </option>
   </component>
@@ -626,7 +627,7 @@
       <workItem from="1474275277860" duration="2877000" />
       <workItem from="1474406660686" duration="406000" />
       <workItem from="1474429504389" duration="1137000" />
-      <workItem from="1474770584400" duration="2776000" />
+      <workItem from="1474770584400" duration="3689000" />
     </task>
     <task id="LOCAL-00001" summary="Blink program works">
       <created>1474174484374</created>
@@ -663,11 +664,18 @@
       <option name="project" value="LOCAL" />
       <updated>1474772180617</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="Compiles OK with blerssi">
+      <created>1474773478386</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1474773478386</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="15053000" />
+    <option name="totallyTimeSpent" value="15966000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="21" y="44" width="1466" height="908" extended-state="0" />
@@ -675,7 +683,7 @@
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.17093426" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3658228" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3658228" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="CMake" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.26708862" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32923833" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3278481" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -730,7 +738,8 @@
     <MESSAGE value="Testing log to file" />
     <MESSAGE value="Added images" />
     <MESSAGE value="Adding blerssi" />
-    <option name="LAST_COMMIT_MESSAGE" value="Adding blerssi" />
+    <MESSAGE value="Compiles OK with blerssi" />
+    <option name="LAST_COMMIT_MESSAGE" value="Compiles OK with blerssi" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
@@ -1044,22 +1053,6 @@
         <state />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/disk/autostart.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="40">
-          <caret line="2" column="0" selection-start-line="2" selection-start-column="0" selection-end-line="2" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/run-uart/blerssi.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="80">
-          <caret line="4" column="0" selection-start-line="4" selection-start-column="0" selection-end-line="4" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/run-uart/lstorage.c">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -1092,26 +1085,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/run-uart/blerssi.c">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="220">
-          <caret line="26" column="20" selection-start-line="26" selection-start-column="20" selection-end-line="26" selection-end-column="20" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/CMakeLists.txt">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="40">
           <caret line="2" column="0" selection-start-line="2" selection-start-column="0" selection-end-line="2" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/run-uart/main.c">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-60">
-          <caret line="23" column="20" selection-start-line="23" selection-start-column="20" selection-end-line="23" selection-end-column="20" />
           <folding />
         </state>
       </provider>
@@ -1128,6 +1105,38 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="40">
           <caret line="2" column="0" selection-start-line="2" selection-start-column="0" selection-end-line="2" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/disk/autostart.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="40">
+          <caret line="2" column="0" selection-start-line="2" selection-start-column="0" selection-end-line="2" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/run-uart/blerssi.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="120">
+          <caret line="6" column="0" selection-start-line="6" selection-start-column="0" selection-end-line="6" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/run-uart/blerssi.c">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="80">
+          <caret line="667" column="7" selection-start-line="667" selection-start-column="7" selection-end-line="667" selection-end-column="7" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/run-uart/main.c">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="307">
+          <caret line="38" column="0" selection-start-line="38" selection-start-column="0" selection-end-line="38" selection-end-column="0" />
           <folding />
         </state>
       </provider>

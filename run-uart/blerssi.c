@@ -665,6 +665,8 @@ void app_client_vmt_scan_result_callback(void *context_handle, vm_bt_gatt_addres
     }
 }
 
+static char buffer[64];
+
 static void app_client_read_remote_rssi_callback(void *context_handle, VMBOOL status, vm_bt_gatt_address_t *bd_addr, VMINT32 rssi)
 {
 	if (exiting) return;
@@ -681,6 +683,17 @@ static void app_client_read_remote_rssi_callback(void *context_handle, VMBOOL st
                 bd_addr->data[0],
                 rssi
                 );
+            //  Send the MAC address and RSSI to SIGFOX e.g. "AT$SS=31323334\r".
+            snprintf(buffer, sizeof(buffer), "AT$SS=%02X%02X%02X%02X%02X%02X%02X\r",
+                bd_addr->data[5],
+                bd_addr->data[4],
+                bd_addr->data[3],
+                bd_addr->data[2],
+                bd_addr->data[1],
+                bd_addr->data[0],
+                rssi < 0 ? -rssi : rssi
+                );
+            send_uart_data((unsigned char *) buffer, strlen(buffer));
         }
         else
         {

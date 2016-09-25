@@ -34,8 +34,8 @@ VM_DCL_OWNER_ID g_owner_id = 0;  /* Module owner of APP */
 vm_dcl_sio_control_dcb_t g_config;  /* UART configuration setting */
 VMCHAR filename[VM_FS_MAX_PATH_LENGTH] = {0};
 VMWCHAR wfilename[VM_FS_MAX_PATH_LENGTH] = {0};
-char buffer[256];
-char buffer2[256];
+static char buffer[256];
+static char buffer2[256];
 int led_color = 2;  //  Blue is default LED color.
 
 void log_to_file(const char *log)
@@ -109,7 +109,7 @@ void uart_irq_handler(void* __unused parameter, VM_DCL_EVENT event, VM_DCL_HANDL
 }
 
 void send_uart_data(unsigned char data[], unsigned int len) {
-    //  Send data to UART port.
+    //  Send data to UART port e.g. "AT$SS=31323334\r".
     snprintf(buffer, sizeof(buffer), "send_uart_data: length = %d | %s", len, (char *) data); log_to_file(buffer);
     if(g_uart_handle != -1){
         //  Write data
